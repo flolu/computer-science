@@ -91,7 +91,7 @@ int main()
   struct trip trip = {start_station, end_station};
   if (!validate_input(trip, 0, 5))
   {
-    printf("Invalid input\n");
+    printf("Ungueltige Eingabe\n");
     return 1;
   }
 
