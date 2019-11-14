@@ -67,8 +67,8 @@ int main()
   scanf("%d", &end_input);
 
   struct trip trip = {
-      {(start_input / 10) % 10, start_input % 10},
-      {(end_input / 10) % 10, end_input % 10}};
+      {start_input / 10, start_input % 10},
+      {end_input / 10, end_input % 10}};
 
   int price = 0;
   price = is_short_trip(trip) ? 2 : 3;
