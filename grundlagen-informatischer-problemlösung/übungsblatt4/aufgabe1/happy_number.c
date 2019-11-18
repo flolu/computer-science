@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 int is_unhappy_sum(int number)
 {
@@ -6,27 +7,34 @@ int is_unhappy_sum(int number)
   for (int i = 0; i < 8; i++)
   {
     if (unhappy_sums[i] == number)
-    {
       return 1;
-    }
   }
   return 0;
 }
 
-int is_happy_number(int number)
+int calculate_sum(int number)
 {
   int sum = 0;
   while (number > 0)
   {
     int digit = number % 10;
-    sum += (digit * digit);
-    if (is_unhappy_sum(sum))
-    {
-      return 0;
-    }
-    number /= 10;
+    number = number / 10;
+    sum += digit * digit;
   }
-  return 1;
+  return sum;
+}
+
+int is_happy_number(int number)
+{
+  while (1)
+  {
+    int sum = calculate_sum(number);
+    if (is_unhappy_sum(sum))
+      return 0;
+    if (sum == 1)
+      return 1;
+    number = sum;
+  }
 }
 
 int main(void)
@@ -34,8 +42,7 @@ int main(void)
   for (int i = 1; i <= 500; i++)
   {
     if (is_happy_number(i))
-    {
-      printf("Happy: %d\n", i);
-    }
+      printf("%d\n", i);
   }
+  return 0;
 }
