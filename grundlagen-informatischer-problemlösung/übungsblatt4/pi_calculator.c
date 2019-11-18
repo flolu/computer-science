@@ -9,23 +9,23 @@ int main()
 
   float pi = 0;
   int n = 0;
-  int is_done = 0;
-  while (!is_done)
+
+  while (1)
   {
-    int numerator = n % 2 == 0 ? 1 : -1;
+    float numerator = n % 2 == 0 ? 1 : -1;
     float denominator = 2 * n + 1;
     float summand = numerator / denominator;
+
     if (fabs(summand) < accuracy)
-    {
-      is_done = 1;
-    }
+      break;
+
     pi += summand;
     n++;
   }
   pi *= 4;
 
   printf("Pi nach %d Iterationen: %f\n", n, pi);
-  printf("Abstand zum genauen Pi: %f\n", fabs(pi - M_PI));
+  printf("Abweichung: %f\n", fabs(pi - M_PI));
 
-  return 1;
+  return 0;
 }
