@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 6: Funktionen}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Binär- und Dezimalzahlen}
+\begin{lstlisting}
+#include<math.h>
+#include<stdio.h>
+
+int binaryToDecimal(long int binary) {
+  int decimal = 0, exponent = 0;
+  while(binary > 0) {
+    decimal += binary % 10 == 1 ? pow(2, exponent) : 0;
+    binary /= 10;
+    exponent++;
+  }
+  return decimal;
+}
+
+long int decimalToBinary(int decimal) {
+  long int binary = 0, i = 1;
+  while (decimal > 0) {
+    int remainder = decimal % 2;
+    decimal /= 2;
+    binary = binary + remainder * i;
+    i *= 10;
+  }
+  return binary;
+}
+
+int main() {
+  long int binary = 1000011101010011;
+  printf("%ld as decimal is: %d\n", binary, binaryToDecimal(binary));
+  int decimal= 34643;
+  printf("%d as binary is: %ld\n", decimal, decimalToBinary(decimal));
+  return 0;
+}
+\end{lstlisting}
+\pagebreak
+\section{Aufgabe 2 -- Quadratische Gleichung}
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>
+
+int solve(int a, int b, int c, double* x1, double* x2) {
+  double inside_root = b * b - 4 * a * c;
+  *x1 = (-b + sqrt(inside_root)) / (2 * a);
+  *x2 = (-b - sqrt(inside_root)) / (2 * a);
+  if (inside_root > 0)
+    return 2;
+  if (inside_root == 0)
+    return 1;
+  if (inside_root < 0)
+    return 0;
+}
+
+int main() {
+  double a, b, c;
+  scanf("%lf %lf %lf", &a, &b, &c);
+  double x1, x2;
+  int anzahl = solve(a, b, c, &x1, &x2);
+  if (!anzahl)
+    printf("keine Loesung");
+  else if (anzahl == 1)
+    printf("eine Loesung x: %lf", x1);
+  else if (anzahl > 1)
+    printf("zwei Loesungen x1: %lf x2: %lf", x1, x2);
+}
+\end{lstlisting}
+\section{Aufgabe 3 -- Mathematische Funktionen}
+\begin{lstlisting}
+#include<math.h>
+#include<stdio.h>
+
+double f1(double x, double y) {
+  if (x == y)
+    printf("Teilen durch 0 ist nicht erlaubt!\n");
+  return (x + y) / (x - y);
+}
+
+double f2(double x, double y) {
+  return sqrt((x * x) + (y * y));
+}
+
+int main() {
+  double x = 22, y = 42;
+  printf("f1(%lf, %lf) = %lf\n", x, y, f1(x,y));
+  printf("f2(%lf, %lf) = %lf\n", x, y, f2(x,y));
+  return 0;
+}
+\end{lstlisting}
+\end{document}
