@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage[document]{ragged2e}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 7: Zeiger und Funktionen}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Zeiger in C}
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+  int var = 10;
+  int *p;
+  p = &var;
+
+  printf("Ausgabe 1: %p \n", &var);
+  printf("Ausgabe 2: %d \n", *p);
+  printf("Ausgabe 3: %d \n", *(&var));
+  printf("Ausgabe 4: %p \n", &p);
+
+  return 0;
+}
+\end{lstlisting}
+\subsection{Ausgabe 1}
+\lstinline{printf("Ausgabe  1: %p \n", &var);} liefert foldende Ausgabe: \lstinline{Ausgabe 1: 0x7fff086e611c}. Durch das \lstinline{&} Symbol wird die Speicheradresse der nachstehenden Variable, in diesem Fall von \lstinline{var}, ausgegeben.
+\linebreak
+\subsection{Ausgabe 2}
+\lstinline{printf("Ausgabe 2: %d \n", *p);} gibt \lstinline{Ausgabe 2: 10} aus. Durch \lstinline{p = &var;} wurde in Zeile 7 dem Zeiger \lstinline{p} die Speicheradresse von dem Integer \lstinline{var} zugewiesen. Nun wird mithilfe des \lstinline{*} Symbols der Wert ausgelesen der in der Speicheradresse von dem Zeiger \lstinline{p} gepspeichert wird (in dem Fall der Wert der Variable \lstinline{var}, also \lstinline{10}).
+\linebreak
+\subsection{Ausgabe 3}
+\lstinline{printf("Ausgabe 3: %d \n", *(&var));} liefert foldende Ausgabe: \lstinline{Ausgabe 3: 10}. Hier gibt \lstinline{&var} die Speicheradresse von der Variable \lstinline{var} zurück. Durch das \lstinline{*} Symbol wird dann der Wert an dieser Speicheradresse ausgelesen. Dieser Wert ist \lstinline{10}, weil in Zeile \lstinline{5} dem Integer \lstinline{var} der Wert \lstinline{10} zugewiesen wurde.
+\linebreak
+\subsection{Ausgabe 4}
+\lstinline{printf("Ausgabe 4: %p \n", &p);} gibt \lstinline{Ausgabe 4: 0x7fff086e6120} aus. Durch das \lstinline{&} Symbol wird die Speicheradresse von dem Pointer \lstinline{p} ausgegeben. Es handelt sich hierbei also nicht um die Adresse, die in dem Pointer \lstinline{p} gepspeichert ist, sondern um die Adresse an welcher der Pointer \lstinline{p} selbst gepspeichert ist. Aus diesem Grund ist Ausgabe 4 auch verschieden von Ausgabe 1.
+\pagebreak
+\section{Aufgabe 2 -- Wertetabellen}
+\subsection{a)}
+\begin{lstlisting}
+#include<stdio.h>
+
+double quadrat(double x) { return x*x; }
+
+void wertetabelle(double (*f)(double), double min, double max, double step) {
+  int steps = (max - min) / step;
+  for (int i = 0; i <= steps; i++) {
+    double x = min + (i * step);
+    printf("f(%lf) = %lf\n", x, f(x));
+  }
+}
+
+int main() {
+  wertetabelle(quadrat, 0.0, 10.0, 1.0);
+  return 0;
+}
+\end{lstlisting}
+\subsection{b)}
+\begin{lstlisting}
+#include<stdio.h>
+#include <stdarg.h>
+
+double cubic(double x) { return x*x*x+2.0; }
+
+void wertetabelle(double (*f)(double), int count, ...) {
+  va_list args;
+  va_start(args, count);
+  for (int i = 0; i < count; i++) {
+    double x = va_arg(args, double);
+    printf("f(%lf) = %lf\n", x, f(x));
+  }
+  va_end(args);
+}
+
+int main() {
+  wertetabelle(cubic, 4, 3.0, 7.0, 11.0, 41.0);
+  return 0;
+}
+\end{lstlisting}
+\end{document}
