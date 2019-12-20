@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage[document]{ragged2e}
+\usepackage[ngerman]{babel}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 9: Reihungen (2)}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Binäre Suche}
+\subsection{a)}
+\begin{lstlisting}
+int linearSearch(int n, int a[], int l) {
+  for (int i = 0; i < l; i++) {
+    if (a[i] == n) return i;
+  }
+  return -1;
+}
+
+int binarySearch(int n, int a[], int l) {
+  int range_start = 0, range_end = l - 1;
+  while (1) {
+    int middle = (range_start + range_end) / 2;
+    if (a[middle] == n) return middle;
+    if (range_start > range_end) return -1;
+    if (a[middle] < n) range_start = middle + 1;
+    else range_end = middle - 1;
+  }
+}
+\end{lstlisting}
+\subsection{b)}
+\begin{lstlisting}
+int main(void) {
+  int n;
+  printf("Zahl eingeben: ");
+  scanf("%d", &n);
+
+  int primes[25] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+  int position_linear_search = linearSearch(n, primes, 25);
+  int position_binary_search = binarySearch(n, primes, 25);
+
+  printf("Suchergebnis der linearen Suche: %d\n", position_linear_search);
+  printf("Suchergebnis der binaeren Suche: %d\n", position_binary_search);
+
+  return 0;
+}
+\end{lstlisting}
+\subsection{c)}
+\begin{lstlisting}
+int binarySearch(int n, int a[], int l) {
+  int* range_start = &a[0];
+  int* range_end = &a[l - 1];
+  while(1) {
+    if (range_start > range_end) return -1;
+    int* middle = ((range_end - range_start) / 2) + range_start;
+    if (*middle == n) return middle - &a[0];
+    if (*middle > n) range_end = middle - 1;
+    else range_start = middle + 1;
+  }
+}
+\end{lstlisting}
+\pagebreak
+\section{Aufgabe 2 -- Magisches Quadrat}
+\begin{lstlisting}
+  ...
+\end{lstlisting}
+\end{document}
