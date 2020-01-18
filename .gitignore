@@ -1,9 +1,11 @@
 *.out
-**/tex/*.aux
-**/tex/*.fdb_latexmk
-**/tex/*.fls
-**/tex/*.gz
-**/tex/*.log
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.gz
+*.log
+
 *.kra~
 *.png~
 *.pbm
