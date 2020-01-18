@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage[document]{ragged2e}
+\usepackage[ngerman]{babel}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 11: Dynamische Datenstrukturen}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Einfach verkettete Listen}
+Ich habe die Aufgabe so interpretiert, dass \lstinline{insert_sorted} die Zahlen aufsteigend ordnet.
+\begin{lstlisting}
+void insert_sorted(int val) {
+  struct node *temp = head;
+  while (temp -> next != NULL && temp -> next -> data < val) {
+    temp = temp -> next;
+  }
+  struct node *inserted = makeNode(val);
+  inserted -> next = temp -> next;
+  temp -> next = inserted;
+}
+
+struct node *reverse() {
+  struct node *previous = NULL;
+  struct node *current = head;
+  struct node *next = NULL;
+  while (current != NULL) {
+    next = current -> next;
+    current -> next = previous;
+    previous = current;
+    current = next;
+  }
+  return previous;
+}
+\end{lstlisting}
+\section{Aufgabe 2 -- Stapel}
+\begin{lstlisting}
+  // ...
+\end{lstlisting}
+\end{document}
