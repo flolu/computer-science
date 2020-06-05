@@ -85,11 +85,123 @@ public class Leibeigener extends Bauer {
 \subsubsection*{Ergänztes Klassdendiagramm}
 \includegraphics[width=\textwidth]{oop4_1.png}
 
-
-\vspace*{2\baselineskip}
+\pagebreak
 \section*{Aufgabe 2}
+\subsection*{Array}
+\texttt{DIAarray.java}
+\begin{lstlisting}
+import java.util.Arrays;
 
+public class DIAarray extends DynIntArray {
+  int array[] = new int[0];
 
+  void add(int e) {
+    int newArray[] = new int[this.array.length + 1];
+    for (int i = 0; i < this.array.length; i++) {
+      newArray[i] = this.array[i];
+    }
+    newArray[this.array.length] = e;
+    this.array = newArray;
+  }
+
+  void setElementAt(int i, int e) {
+    this.array[i] = e;
+  }
+
+  int getElementAt(int i) {
+    return this.array.length > i ? this.array[i] : 0;
+  }
+
+  int getElementCount() {
+    return this.array.length;
+  }
+
+  void print() {
+    System.out.println(Arrays.toString(this.array));
+  }
+}
+\end{lstlisting}
+
+\subsection*{List}
+\texttt{Node.java}
+\begin{lstlisting}
+public class Node {
+  Node previous;
+  Node next;
+  int value = 0;
+
+  Node() {}
+  Node(int value) {
+    this.value = value;
+  }
+}
+\end{lstlisting}
+\pagebreak
+\texttt{DIList.java}
+\begin{lstlisting}
+public class DIAlist extends DynIntArray {
+  Node firstNode;
+
+  void add(int e) {
+    Node last = this.getLastNode();
+    Node inserted = new Node(e);
+    if (last == null) this.firstNode = inserted;
+    else last.next = inserted;
+  }
+
+  void setElementAt(int i, int e) {
+    Node node = this.getNodeAt(i);
+    if (node != null) node.value = e;
+  }
+
+  int getElementAt(int i) {
+    Node node = this.getNodeAt(i);
+    return node == null ? 0 : node.value;
+  }
+
+  int getElementCount() {
+    Node temp = this.firstNode;
+    int i = 1;
+    while (temp.next != null) {
+      temp = temp.next;
+      i++;
+    }
+    return i;
+  }
+
+  void print() {
+    String out = "[";
+    Node temp = this.firstNode;
+    boolean first = true;
+    while (temp != null) {
+      if (first) {
+        out += temp.value;
+        first = false;
+      } else out += ", " + temp.value;
+      temp = temp.next;
+    }
+    System.out.println(out + "]");
+  }
+
+  private Node getNodeAt(int i) {
+    Node temp = this.firstNode;
+    for (int j = 0; j < i; j++) {
+      if (temp.next == null) return null;
+      temp = temp.next;
+    }
+    return temp;
+  }
+
+  private Node getLastNode() {
+    Node temp = this.firstNode;
+    if (temp == null) return null;
+    while (temp.next != null) {
+      temp = temp.next;
+    }
+    return temp;
+  }
+}
+\end{lstlisting}
 
 
 \end{document}
