@@ -161,6 +161,7 @@ public class DIAlist extends DynIntArray {
 
   int getElementCount() {
     Node temp = this.firstNode;
+    if (temp == null) return 0;
     int i = 1;
     while (temp.next != null) {
       temp = temp.next;
