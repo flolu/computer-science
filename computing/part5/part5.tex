@@ -79,8 +79,8 @@ void test_all(unsigned expected_value) {
 
 int main(void) {
   srand(time(NULL));
-  x = (~rand())+1;
-  y = (~rand())+1;
+  x = rand();
+  y = rand();
 
   printf("1:\n");
   test_all(x);
@@ -90,8 +90,7 @@ int main(void) {
 
   printf("\n3 positive x:\n");
   test_all((x<0?1:-1));
-
-  x = (~-34546)+1;
+  x = (~-1 * x)+1;
   printf("\n3 negative x:\n");
   test_all((x<0?1:-1));
 
@@ -103,44 +102,44 @@ Die Ausgabe des obigen C-Programms ist:
 
 \begin{lstlisting}
 1:
-a: ab739e86 ?== 0 (match: 0)
-b: ab739e86 ?== 1 (match: 0)
-c: ab739e86 ?== 89529682 (match: 0)
-d: ab739e86 ?== 548c6179 (match: 0)
-e: ab739e86 ?== ab739e86 (match: 1)
-f: ab739e86 ?== eadce7a1 (match: 0)
+a: 47ad6e0f ?== 0 (match: 0)
+b: 47ad6e0f ?== ffffffff (match: 0)
+c: 47ad6e0f ?== 43800800 (match: 0)
+d: 47ad6e0f ?== b85291f0 (match: 0)
+e: 47ad6e0f ?== 47ad6e0f (match: 1)
+f: 47ad6e0f ?== 11eb5b83 (match: 0)
 
 2:
-a: 89529682 ?== 0 (match: 0)
-b: 89529682 ?== 1 (match: 0)
-c: 89529682 ?== 89529682 (match: 1)
-d: 89529682 ?== 548c6179 (match: 0)
-e: 89529682 ?== ab739e86 (match: 0)
-f: 89529682 ?== eadce7a1 (match: 0)
+a: 43800800 ?== 0 (match: 0)
+b: 43800800 ?== ffffffff (match: 0)
+c: 43800800 ?== 43800800 (match: 1)
+d: 43800800 ?== b85291f0 (match: 0)
+e: 43800800 ?== 47ad6e0f (match: 0)
+f: 43800800 ?== 11eb5b83 (match: 0)
 
 3 positive x:
 a: ffffffff ?== 0 (match: 0)
-b: ffffffff ?== 1 (match: 0)
-c: ffffffff ?== 8dd2100a (match: 0)
-d: ffffffff ?== 86f1 (match: 0)
-e: ffffffff ?== ffff790e (match: 0)
-f: ffffffff ?== ffffde43 (match: 0)
+b: ffffffff ?== ffffffff (match: 1)
+c: ffffffff ?== 43800800 (match: 0)
+d: ffffffff ?== b85291f0 (match: 0)
+e: ffffffff ?== 47ad6e0f (match: 0)
+f: ffffffff ?== 11eb5b83 (match: 0)
 
 3 negative x:
 a: ffffffff ?== 0 (match: 0)
 b: ffffffff ?== ffffffff (match: 1)
-c: ffffffff ?== 86e2 (match: 0)
-d: ffffffff ?== ffff790d (match: 0)
-e: ffffffff ?== 86f2 (match: 0)
-f: ffffffff ?== 21bc (match: 0)
+c: ffffffff ?== 0 (match: 0)
+d: ffffffff ?== fffffffe (match: 0)
+e: ffffffff ?== 1 (match: 0)
+f: ffffffff ?== 0 (match: 0)
 \end{lstlisting}
 
-Wodurch sich eindeutig folgende Lösungen ergeben:
+Wodurch sich folgende Lösungen ergeben:
 
 1) e
 
 2) c
 
-3) b für negative \texttt{x}, es gibt keine Lösung für positive \texttt{x}
+3) b
 
 \end{document}
