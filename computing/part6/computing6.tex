@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Rechnerstrukturen: Übungsblatt 6}
+\author{Florian Ludewig (185722)}
+\date\today
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 2}
+\includegraphics[width=\textwidth]{computing6_2.png}
+
+\pagebreak
+\section*{Aufgabe 3}
+\begin{lstlisting}
+unsigned i2f(int i) {
+  if (i == 0) return 0;
+  int abs = i < 0 ? -i : i;
+
+  int s = i > 0 ? 0b0 : 0x80000000;
+
+  int tmp = abs;
+  int right_shifts = 0;
+  while (0b01 != abs) {
+    abs = abs >> 1;
+    right_shifts++;
+  }
+  int e = (127 + right_shifts) << 23;
+
+  tmp = (tmp << (32 - right_shifts)) >> 9;
+  int m = tmp & 0x007FFFFF;
+
+  return s | e | m;
+}
+\end{lstlisting}
+
+\end{document}
