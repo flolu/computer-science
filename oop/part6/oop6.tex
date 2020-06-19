@@ -1,0 +1,285 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 6}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\texttt{App.java}
+\begin{lstlisting}
+public class App {
+  public static void main(String[] args) throws Exception {
+    // contained
+    new Rectangle(2.5, 2.5, 4, 4).getLocationRelation(new Rectangle(1, 2.5, 1, 1));
+
+    // aligned
+    new Rectangle(0, 0.5, 3, 2).getLocationRelation(new Rectangle(2, -1, 2, 2));
+
+    // same
+    new Rectangle(2, -2.1, 2, 2).getLocationRelation(new Rectangle(2, -2.1, 2, 2));
+
+    // disjoint
+    new Rectangle(0, 0, 1, 1).getLocationRelation(new Rectangle(-100, 100, 1, 1));
+  }
+}
+\end{lstlisting}
+\texttt{Figure.java}
+\begin{lstlisting}
+abstract class Figure {
+  protected double x;
+  protected double y;
+
+  Figure() {
+    x = 0;
+    y = 0;
+  }
+
+  Figure(double x, double y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  void printXY() {
+    System.out.println("X: " + getX() + " Y: " + getY());
+  }
+}
+\end{lstlisting}
+\texttt{MobileObject.java}
+\begin{lstlisting}
+interface MobileObject {
+  void move(double x, double y);
+
+  void increase(double value);
+
+  void decrease(double value);
+}
+\end{lstlisting}
+\texttt{Rectangle.java}
+\begin{lstlisting}
+public class Rectangle extends Figure implements MobileObject {
+  private double height;
+  private double width;
+
+  Rectangle(double h, double w) {
+    super();
+    height = h;
+    width = w;
+  }
+
+  Rectangle(double x, double y, double h, double w) {
+    super(x, y);
+    height = h;
+    width = w;
+  }
+
+  double getHeight() {
+    return height;
+  }
+
+  double getWidth() {
+    return width;
+  }
+
+  void printXY() {
+    super.printXY();
+    System.out.println("Height: " + getHeight() + " Width: " + getWidth());
+  }
+
+  public void move(double x, double y) {
+    this.x += x;
+    this.y += y;
+  }
+
+  public void increase(double value) {
+    width *= value;
+    height *= value;
+  }
+
+  public void decrease(double value) {
+    width *= 1 / value;
+    height *= 1 / value;
+  }
+
+  void getLocationRelation(Rectangle r) {
+    double intersectionY = intersectionYAxis(r);
+    double intersectionX = intersectionXAxis(r);
+
+    if (intersectionY < 0 || intersectionX < 0) {
+      System.out.println("disjoint");
+      return;
+    }
+
+    if (intersectionY == r.getHeight() && intersectionY == getHeight() && intersectionX == r.getWidth()
+        && intersectionX == getWidth()) {
+      System.out.println("same");
+      return;
+    }
+
+    if (intersectionY == Math.min(r.getHeight(), getHeight()) && intersectionX == Math.min(r.getWidth(), getWidth())) {
+      System.out.println("contained");
+      return;
+    }
+
+    if ((intersectionX == 0 && intersectionY != 0) || (intersectionX != 0 && intersectionY == 0)) {
+      System.out.println("aligned");
+      return;
+    }
+
+    System.out.println("something else");
+  }
+
+  private double intersectionYAxis(Rectangle r) {
+    return getIntersection(y - getHeight() / 2, y + getHeight() / 2, r.y - r.getHeight() / 2, r.y + r.getHeight() / 2);
+  }
+
+  private double intersectionXAxis(Rectangle r) {
+    return getIntersection(x - getWidth() / 2, x + getWidth() / 2, r.x - r.getWidth() / 2, r.x + r.getWidth() / 2);
+  }
+
+  private double getIntersection(double min1, double max1, double min2, double max2) {
+    if (max2 > max1 && min1 > min2)
+      return max1 - min1;
+    if (max1 > max2 && min2 > min1)
+      return max2 - min2;
+    return max1 > max2 ? max2 - min1 : max1 - min2;
+  }
+}
+\end{lstlisting}
+\section*{Aufgabe 2}
+\texttt{Roman.java}
+\begin{lstlisting}
+public class Roman {
+  private String romanString;
+  private int romanValue;
+
+  Roman(String roman) {
+    this.romanString = roman;
+    romanValue = romanToInt(roman);
+  }
+
+  Roman(int value) {
+    romanValue = value;
+    romanString = intToRoman(value);
+  }
+
+  public Roman add(Roman r) {
+    return new Roman(getValue() + r.getValue());
+  }
+
+  public Roman substract(Roman r) {
+    int result = getValue() - r.getValue();
+    if (result <= 0)
+      throw new Error("negative numbers or zero no allowed");
+    return new Roman(result);
+  }
+
+  public Roman multiply(Roman r) {
+    return new Roman(getValue() * r.getValue());
+  }
+
+  public Roman divide(Roman r) {
+    return new Roman(getValue() / r.getValue());
+  }
+
+  public String toString() {
+    return romanString;
+  }
+
+  public int hashCode() {
+    return getValue();
+  }
+
+  public int getValue() {
+    return romanValue;
+  }
+
+  public boolean equals(Roman r) {
+    return r.hashCode() == hashCode();
+  }
+
+  private String intToRoman(int value) {
+    String roman = "";
+    String[] chars = new String[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+    int[] values = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+
+    int counter = 0;
+    for (int i = values.length - 1; i >= 0; i--) {
+      counter = value / values[i];
+      value = value % values[i];
+      for (int j = 0; j < counter; j++)
+        roman += chars[i];
+    }
+    return roman;
+  }
+
+  private int romanToInt(String roman) {
+    int value = 0;
+    String[] binaries = new String[] { "IV", "IX", "XL", "XC", "CD", "CM" };
+
+    while (roman.length() > 0) {
+      if (roman.length() > 1 && stringIncludes(roman.substring(0, 2), binaries)) {
+        value += romanCharToValue(roman.substring(0, 2));
+        roman = roman.substring(2, roman.length());
+      } else {
+        value += romanCharToValue(roman.substring(0, 1));
+        roman = roman.substring(1, roman.length());
+      }
+    }
+
+    return value;
+  }
+
+  private int romanCharToValue(String romanChar) {
+    String[] chars = new String[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+    int[] values = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+    for (int i = 0; i < chars.length; i++) {
+      if (romanChar.equals(chars[i]))
+        return values[i];
+    }
+    return 0;
+  }
+
+  private boolean stringIncludes(String search, String[] strings) {
+    for (String s : strings) {
+      if (s.equals(search))
+        return true;
+    }
+    return false;
+  }
+}
+\end{lstlisting}
+
+\end{document}
