@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Rechnerstrukturen: Übungsblatt 7}
+\author{Florian Ludewig (185722)}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 3}
+
+\begin{itemize}
+	\item 1 - \texttt{moveb} verschiebt nur 8 Bit, aber \texttt{\%ebx} ist 64 Bit groß
+	\item 2 - \texttt{movel} verschiebt nur 32 Bit, aber wir wollen 64 Bit verschieben \texttt{\%rsp}
+	\item 3 - /
+	\item 4 - \texttt{\%sl} existiert nicht, gemeint ist wahrscheinlich \texttt{\%sil}
+	\item 5 - \texttt{0x123} hat 12 Bit, es würde auch \texttt{movew} genügen
+	\item 6 - /
+	\item 7 - /
+	\item 8 - /
+\end{itemize}
+
+\section*{Aufgabe 4}
+\begin{lstlisting}
+movl %eax, (%rsp)
+movw (%rax), %dx
+movb $0xFF, %bl
+\end{lstlisting}
+
+\end{document}
