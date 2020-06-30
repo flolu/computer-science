@@ -31,13 +31,13 @@
 \section*{Aufgabe 3}
 
 \begin{itemize}
-	\item 1 - \texttt{moveb} verschiebt nur 8 Bit, aber \texttt{\%ebx} ist 64 Bit groß
-	\item 2 - \texttt{movel} verschiebt nur 32 Bit, aber wir wollen 64 Bit verschieben \texttt{\%rsp}
-	\item 3 - /
+	\item 1 - \texttt{moveb} verschiebt 8 Bit, aber \texttt{0xf} ist nur 4 Bit groß. Sinnvoller wäre \texttt{moveb \$0xff, (\%ebx)}
+	\item 2 - \texttt{movel} verschiebt nur 32 Bit, aber wir wollen 64 Bit verschieben (\texttt{\%rax})
+	\item 3 - \texttt{movew} verschiebt nur 16 Bit, aber wir wollen 64 Bit verschieben (\texttt{(\%rax)})
 	\item 4 - \texttt{\%sl} existiert nicht, gemeint ist wahrscheinlich \texttt{\%sil}
-	\item 5 - \texttt{0x123} hat 12 Bit, es würde auch \texttt{movew} genügen
+	\item 5 - /
 	\item 6 - /
-	\item 7 - /
+	\item 7 - \texttt{moveb} verschiebt nur 8 Bit, aber wir wollen 16 Bit verschieben (\texttt{\%si})
 	\item 8 - /
 \end{itemize}
 
