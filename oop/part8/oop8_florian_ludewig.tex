@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 8}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\texttt{Node.java}
+\begin{lstlisting}
+public class Node {
+  public int value;
+  public Node next;
+
+  public Node(int val, Node next) {
+    value = val;
+    this.next = next;
+  }
+
+  protected Node clone() {
+    if (next == null)
+      return new Node(value, null);
+    return new Node(value, next.clone());
+  }
+}
+\end{lstlisting}
+\texttt{SimpleList.java}
+\begin{lstlisting}
+public class SimpleList {
+  private Node head = null;
+
+  SimpleList() {
+  }
+
+  SimpleList(Node initialHead) {
+    head = initialHead;
+  }
+
+  public void add(int i) {
+    head = new Node(i, head);
+  }
+
+  protected SimpleList clone() {
+    return new SimpleList(head.clone());
+  }
+}
+\end{lstlisting}
+
+\section*{Aufgabe 2}
+\subsection*{1)}
+\texttt{ActionObject.java}
+\begin{lstlisting}
+public interface ActionObject {
+  void action(Node n);
+}
+\end{lstlisting}
+\texttt{CountStringAction1.java}
+\begin{lstlisting}
+public class CountStringAction1 implements ActionObject {
+  private int counter = 0;
+  private String search;
+
+  CountStringAction1(String str) {
+    search = str;
+  }
+
+  public void action(Node n) {
+    if (n.data instanceof String && n.data == search)
+      counter++;
+  }
+
+  public int getCounter() {
+    return counter;
+  }
+}
+\end{lstlisting}
+\texttt{List.java}
+\begin{lstlisting}
+public class List {
+  private Node head = null;
+
+  void add(Object obj) {
+    this.head = new Node(obj, head);
+  }
+
+  public void traverseAndApply(ActionObject p) {
+    for (Node cursor = head; cursor != null; cursor = cursor.next) {
+      p.action(cursor);
+    }
+  }
+
+  void print() {
+    for (Node cursor = head; cursor != null; cursor = cursor.next) {
+      System.out.println(cursor.data.toString());
+    }
+  }
+}
+\end{lstlisting}
+\texttt{Node.java}
+\begin{lstlisting}
+public class Node {
+  public Object data;
+  public Node next;
+
+  Node(Object obj, Node node) {
+    data = obj;
+    next = node;
+  }
+}
+\end{lstlisting}
+\texttt{Main.java}
+\begin{lstlisting}
+public class Main {
+  public static void main(String[] args) throws Exception {
+    List list = new List();
+    list.add("string");
+    list.add(42);
+    list.add("string");
+    list.add("something else");
+    list.add("string");
+    countOccurences1(list, "string");
+    countOccurences2(list, "string");
+  }
+
+  public static void countOccurences1(List list, String str) {
+    CountStringAction1 cs1 = new CountStringAction1(str);
+    list.traverseAndApply(cs1);
+    System.out.println(str + " kommt " + cs1.getCounter() + " mal in der Liste vor");
+  }
+
+  public static void countOccurences2(List list, String str) {
+    CountStringAction2 cs2 = new CountStringAction2(str);
+    list.traverseAndApply(cs2);
+    System.out.println(str + " kommt " + cs2.getCounter() + " mal in der Liste vor");
+  }
+}
+\end{lstlisting}
+\subsection*{2)}
+\texttt{CountStringAction2.java}
+\begin{lstlisting}
+public class CountStringAction2 implements ActionObject {
+  private int counter = 0;
+  private String search;
+
+  CountStringAction2(String str) {
+    search = str;
+  }
+
+  public void action(Node n) {
+    if (n.data instanceof String && n.data == search) {
+      counter++;
+      if (counter >= 5)
+        n.data = "XXX";
+    }
+  }
+
+  public int getCounter() {
+    return counter;
+  }
+}
+\end{lstlisting}
+
+\end{document}
